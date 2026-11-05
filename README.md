@@ -11,13 +11,12 @@ Nucleus **segmentation + 4-class classification** (epithelial / lymphocyte / neu
 ## Run the live laptop demo
 The demo opens a local web page where you can run the trained model on the included example image or upload another H&E image. It uses the checkpoint produced during training; the weights are kept outside Git because the file is large.
 
-Install a standard CPython 3.11 or 3.12 build from [python.org](https://www.python.org/downloads/windows/) first. Then, on Windows from this project folder:
+From this project folder, run these commands in Command Prompt or PowerShell. They use the installed `python` command directly and do not require environment activation:
 ```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m streamlit run demo_app.py
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m streamlit run demo_app.py
 ```
 The app opens in your browser. By default it looks for `D:\ds\monusac_run\best.pt`. If your checkpoint is elsewhere, paste its path into the **Model checkpoint** field in the sidebar. The demo runs on CUDA when available and otherwise uses CPU; CPU inference can take longer. Click **Run segmentation** to see instance outlines and per-class counts.
 
