@@ -8,3 +8,5 @@ pandas
 seaborn
 matplotlib
 tqdm
+Pillow>=9.0
+streamlit>=1.32

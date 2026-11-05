@@ -8,6 +8,21 @@ Nucleus **segmentation + 4-class classification** (epithelial / lymphocyte / neu
 3. ImageNet weights need Internet ON. Offline: upload torchvision `resnet34` weights and set `encoder_weights_path`.
 4. Session limit: `time_budget_min=500` stops cleanly; rerun with `resume=True`.
 
+## Run the live laptop demo
+The demo opens a local web page where you can run the trained model on the included example image or upload another H&E image. It uses the checkpoint produced during training; the weights are kept outside Git because the file is large.
+
+On Windows, from this project folder:
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m streamlit run demo_app.py
+```
+The app opens in your browser. By default it looks for `D:\ds\monusac_run\best.pt`. If your checkpoint is elsewhere, paste its path into the **Model checkpoint** field in the sidebar. The demo runs on CUDA when available and otherwise uses CPU; CPU inference can take longer. Click **Run segmentation** to see instance outlines and per-class counts.
+
+On your current `D:\ds` setup, the app crops its built-in example from `D:\ds\monusac_run\figures\eval_test_panels_best.png`; the image stays local and is not part of the GitHub repository. If you run the code on another computer, upload a PNG, JPEG, or TIFF H&E image instead. The example has no ground-truth mask in the app.
+
 Every knob is in `nucseg/config.py` and is also a CLI flag (`--epochs 80 --encoder scratch`).
 
 ## Layout
@@ -37,11 +52,5 @@ Train: class weights, augmentation preview, curves. Eval: confusion matrix, per-
 best/median/worst prediction panels, attention-gate maps, post-processing tuning grid.
 Tables: `history.csv`, `eda_*.csv`, `per_image_*.csv`, `results_*.json`.
 
-## Git: permanent fix
-Root cause: the repo root was a parent folder (Downloads), so `git add .` swept in sibling projects and a nested repo.
-```
-cd <this folder>
-bash tools/fix_stray_history.sh     # backs up, re-roots history to this folder, strips submodule refs
-bash tools/install_guard.sh         # root == this folder; pre-commit guard blocks foreign paths, nested repos, >5 MB / weights / data
-git remote add origin <url> && git push --force --all
-```
+## Checkpoint and data
+Keep the trained checkpoint and MoNuSAC dataset outside the Git repository. The `.gitignore` excludes model weights, caches, and data files.
